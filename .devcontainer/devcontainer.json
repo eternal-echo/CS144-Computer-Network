@@ -1,0 +1,40 @@
+{
+    "name": "CS144-Dev",
+    "image": "vidocqh/cs144:latest",
+    "workspaceFolder": "/home/cs144",
+  
+    // 可选：让容器访问宿主机代理
+    "containerEnv": {
+      "HTTP_PROXY": "http://host.docker.internal:7890",
+      "HTTPS_PROXY": "http://host.docker.internal:7890"
+    },
+  
+    // 可选：启用主机网络 (某些系统不支持)
+    // "runArgs": ["--network=host"],
+  
+    "customizations": {
+      "vscode": {
+        "settings": {
+          // Copilot 优化
+          "github.copilot.proxy": "",
+          "github.copilot.advanced.useHelix": true,
+          "terminal.integrated.defaultProfile.linux": "bash",
+          "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools"
+        },
+        "extensions": [
+          "ms-vscode.cpptools",
+          "ms-vscode.cmake-tools",
+          "GitHub.copilot",
+          "GitHub.copilot-chat"
+        ]
+      }
+    },
+  
+    "features": {},
+    "mounts": [
+      "source=${localWorkspaceFolder},target=/home/cs144,type=bind"
+    ],
+  
+    "remoteUser": "root"
+  }
+  
