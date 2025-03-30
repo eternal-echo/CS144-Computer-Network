@@ -49,7 +49,7 @@
 			"name": "sponge debug",//!挑个容易识别的名字
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/build/tests/recv_connect", //!设置为测试程序源码相对应的目标程序路径 "${workspaceFolder}/build/doctests/address_dt"
+			"program": "${workspaceFolder}/build/tests/recv_close", //!设置为测试程序源码相对应的目标程序路径 "${workspaceFolder}/build/doctests/address_dt"
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}",

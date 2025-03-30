@@ -25,7 +25,8 @@
           "ms-vscode.cpptools",
           "ms-vscode.cmake-tools",
           "GitHub.copilot",
-          "GitHub.copilot-chat"
+          "GitHub.copilot-chat",
+          "eamodio.gitlens"
         ]
       }
     },
