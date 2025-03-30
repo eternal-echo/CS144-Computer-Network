@@ -50,6 +50,7 @@ class StreamReassembler {
     void push_substring(const std::string &data, const uint64_t index, const bool eof);
 
     //! \name Access the reassembled byte stream
+    // 作用：返回当前已经被重组的字节流
     //!@{
     const ByteStream &stream_out() const { return _output; }
     ByteStream &stream_out() { return _output; }

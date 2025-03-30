@@ -5,6 +5,7 @@
 #include <deque>
 
 //! \brief An in-order byte stream.
+// 简介：一个有序的字节流（LAB1）
 
 //! Bytes are written on the "input" side and read from the "output"
 //! side.  The byte stream is finite: the writer can end the input,
