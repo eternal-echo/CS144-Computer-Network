@@ -46,30 +46,50 @@ long StreamReassembler::merge_block(block_node &elm1, const block_node &elm2) {
 //! \details This function accepts a substring (aka a segment) of bytes,
 //! possibly out-of-order, from the logical stream, and assembles any newly
 //! contiguous substrings and writes them into the output stream in order.
+/*!
+ * \brief 将数据子串推入重组器进行重组
+ * \param data 待重组的数据子串
+ * \param index 子串在原始数据流中的起始索引
+ * \param eof 是否为数据流的结束标志
+ * \details 该函数接收可能乱序到达的数据子串，将其按序重组并写入输出流中
+ */
 void StreamReassembler::push_substring(const string &data, const size_t index, const bool eof) {
-    if (index >= _head_index + _capacity) {  // capacity over
+    // 检查是否超出容量限制
+    if (index >= _head_index + _capacity) {  
+        if (eof) {
+            _eof_flag = true;
+            if (empty()) {
+                _output.end_input();
+            }
+        }  
         return;
     }
 
-    // handle extra substring prefix
+    // 处理子串的前缀部分，确保只保留未处理的数据
     block_node elm;
-    if (index + data.length() <= _head_index) {  // couldn't equal, because there have emtpy substring
-        goto JUDGE_EOF;
-    } else if (index < _head_index) {
+    if (index + data.length() <= _head_index) {  // 如果整个子串都已经处理过，直接跳转到EOF判断
+        if (eof) {
+            _eof_flag = true;
+            if (empty()) {
+                _output.end_input();
+            }
+        }
+        return;
+    } else if (index < _head_index) {  // 如果子串部分重叠，只取未处理部分
         size_t offset = _head_index - index;
         elm.data.assign(data.begin() + offset, data.end());
         elm.begin = index + offset;
         elm.length = elm.data.length();
-    } else {
+    } else {  // 完整保存新的子串
         elm.begin = index;
         elm.length = data.length();
         elm.data = data;
     }
     _unassembled_byte += elm.length;
 
-    // merge substring
+    // 合并重叠的子串
     do {
-        // merge next
+        // 向后合并：与后续重叠的子串进行合并
         long merged_bytes = 0;
         auto iter = _blocks.lower_bound(elm);
         while (iter != _blocks.end() && (merged_bytes = merge_block(elm, *iter)) >= 0) {
@@ -77,7 +97,7 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
             _blocks.erase(iter);
             iter = _blocks.lower_bound(elm);
         }
-        // merge prev
+        // 向前合并：与前面重叠的子串进行合并
         if (iter == _blocks.begin()) {
             break;
         }
@@ -94,17 +114,16 @@ void StreamReassembler::push_substring(const string &data, const size_t index, c
     } while (false);
     _blocks.insert(elm);
 
-    // write to ByteStream
+    // 将连续的数据写入ByteStream
     if (!_blocks.empty() && _blocks.begin()->begin == _head_index) {
         const block_node head_block = *_blocks.begin();
-        // modify _head_index and _unassembled_byte according to successful write to _output
+        // 更新头索引和未组装字节数
         size_t write_bytes = _output.write(head_block.data);
         _head_index += write_bytes;
         _unassembled_byte -= write_bytes;
         _blocks.erase(_blocks.begin());
     }
-
-JUDGE_EOF:
+    // 处理EOF标志，在所有数据处理完成后结束输入
     if (eof) {
         _eof_flag = true;
     }
