@@ -9,6 +9,48 @@
 #include <functional>
 #include <queue>
 
+class Timer {
+  private:
+    size_t _elapsed = 0;               // 已经过了多少 ms
+    size_t _timeout = 0;               // 当前 RTO 超时阈值
+    bool _running = false;             // 是否开启
+
+  public:
+    Timer() = default;
+    Timer(size_t timeout) : _timeout(timeout) {}
+
+    // 启动计时器，清零时间
+    void restart() {
+        _elapsed = 0;
+        _running = true;
+    }
+
+    // 停止计时器
+    void stop() { _running = false; }
+
+    // 当前是否运行中
+    bool is_running() const { return _running; }
+
+    // 设置 RTO
+    void set_timeout(size_t timeout) { _timeout = timeout; }
+
+    // 获取当前 RTO
+    size_t get_timeout() const { return _timeout; }
+
+    // 时间推进
+    void tick(size_t ms) {
+        if (_running) {
+            _elapsed += ms;
+        }
+    }
+
+    // 是否已经超时
+    bool check_timeout() const {
+        return _running && _elapsed >= _timeout;
+    }
+};
+
+
 //! \brief The "sender" part of a TCP implementation.
 
 //! Accepts a ByteStream, divides it up into segments and sends the
@@ -31,6 +73,24 @@ class TCPSender {
 
     //! the (absolute) sequence number for the next byte to be sent
     uint64_t _next_seqno{0};
+
+    //! 已经发送出去但还未收到 ACK 确认的字节数
+    size_t _bytes_in_flight = 0;
+
+    //! 是否发送带 SYN/FIN 的包
+    bool _fin_flag = false;
+
+    //! 窗口大小，根据文档初始值应为 1
+    uint16_t _window_size = 1;
+
+    //! 连续重传次数
+    uint32_t _consecutive_retransmissions_count = 0;
+
+    //! 已经发出但还未收到 ACK 确认的 TCPSegment 队列
+    std::queue<std::pair<uint64_t, TCPSegment> > outstanding_segments{};
+
+    //! 重传定时器
+    Timer _timer;
 
   public:
     //! Initialize a TCPSender
