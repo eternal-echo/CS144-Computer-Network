@@ -1,0 +1,145 @@
+<mxfile host="Electron" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/24.7.5 Chrome/126.0.6478.183 Electron/31.3.0 Safari/537.36" version="24.7.5">
+  <diagram name="TCP_Sender_Outstanding_Queue" id="tcp-sender-queue">
+    <mxGraphModel dx="2669" dy="887" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" value="TCP Sender - outstanding_segments 队列交互机制" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=18;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="350" y="20" width="470" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="bytestream" value="ByteStream&#xa;(应用数据)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="320" y="80" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="fill-window" value="fill_window()&#xa;📊 窗口管理 + 数据打包" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="490" y="70" width="160" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="queue-container" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="420" y="220" width="300" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="queue-title" value="outstanding_segments 队列" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="470" y="230" width="200" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="queue-elem1" value="🥇 Segment 1&#xa;abs_seqno: 1000&#xa;length: 100" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#ff6666;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="440" y="270" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="queue-elem2" value="🥈 Segment 2&#xa;abs_seqno: 1100&#xa;length: 50" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="530" y="270" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="queue-elem3" value="🥉 Segment 3&#xa;abs_seqno: 1150&#xa;length: 75" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#666666;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="620" y="270" width="80" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="queue-note" value="📌 队列特性:&#xa;• std::queue&lt;pair&lt;uint64_t, TCPSegment&gt;&gt;&#xa;• FIFO: 先发送的在队首&#xa;• 重传时总是取 front()&#xa;• ACK确认时从队首开始移除" style="text;html=1;strokeColor=none;fillColor=#e8f5e8;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=9;" parent="1" vertex="1">
+          <mxGeometry x="440" y="330" width="260" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="ack-received" value="ack_received()&#xa;🎯 ACK 处理器" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d4edda;strokeColor=#28a745;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="879" y="290" width="140" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="tick-func" value="tick()&#xa;⏰ 超时重传器" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8d7da;strokeColor=#d32f2f;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="150" y="290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="timer" value="Timer&#xa;重传定时器" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#ff6666;" parent="1" vertex="1">
+          <mxGeometry x="-20" y="290" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="segments-out" value="_segments_out&#xa;📤 待发送队列" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d1ecf1;strokeColor=#0c5460;" parent="1" vertex="1">
+          <mxGeometry x="435" y="480" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="network-out" value="🌐 网络层&#xa;(发送到接收方)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="615" y="480" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="ack-input" value="📨 ACK 确认&#xa;(来自接收方)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="1090" y="290" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="state-vars" value="状态变量" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e8f5e8;strokeColor=#82b366;verticalAlign=top;" parent="1" vertex="1">
+          <mxGeometry x="780" y="100" width="200" height="130" as="geometry" />
+        </mxCell>
+        <mxCell id="bytes-flight" value="_bytes_in_flight" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="800" y="130" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="next-seqno" value="_next_seqno" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="890" y="130" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="window-size" value="_window_size" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="800" y="170" width="80" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="retx-count" value="_consecutive_&#xa;retransmissions" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="890" y="170" width="80" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="arrow1" value="read()" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeWidth=2;" parent="1" source="bytestream" target="fill-window" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="670" y="270" as="sourcePoint" />
+            <mxPoint x="720" y="220" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow2" value="📥 emplace(abs_seqno, seg)&#xa;新段入队" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeWidth=2;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" source="fill-window" target="queue-container" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="300" as="sourcePoint" />
+            <mxPoint x="450" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow3" value="📤 立即发送&#xa;_segments_out.push()" style="endArrow=classic;html=1;rounded=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;exitX=0.25;exitY=1;exitDx=0;exitDy=0;strokeWidth=2;" parent="1" source="queue-container" target="segments-out" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="450" as="sourcePoint" />
+            <mxPoint x="450" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow4" value="🌐 发送" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeWidth=2;" parent="1" source="segments-out" target="network-out" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="415" y="450" as="sourcePoint" />
+            <mxPoint x="465" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow5" value="📨 处理" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;strokeWidth=2;" parent="1" source="ack-input" target="ack-received" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="949" y="310" as="sourcePoint" />
+            <mxPoint x="849" y="310" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow6" value="📤 while(!empty())&#xa;pop() 已确认段" style="endArrow=classic;html=1;rounded=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;strokeWidth=2;fillColor=#d4edda;strokeColor=#28a745;" parent="1" source="ack-received" target="queue-container" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="500" y="380" as="sourcePoint" />
+            <mxPoint x="400" y="360" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow7" value="⏰ timeout" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeWidth=2;" parent="1" source="timer" target="tick-func" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="330" y="460" as="sourcePoint" />
+            <mxPoint x="380" y="410" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow8" value="🔄 front().second&#xa;重传最早段" style="endArrow=none;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;strokeWidth=2;fillColor=#f8d7da;strokeColor=#d32f2f;startArrow=classic;startFill=1;endFill=0;" parent="1" source="tick-func" target="queue-container" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="320" as="sourcePoint" />
+            <mxPoint x="420" y="320" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="arrow9" value="🔄 重传" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0;entryDx=0;entryDy=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;strokeWidth=2;strokeColor=#d32f2f;" parent="1" source="tick-func" target="segments-out" edge="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="280" y="350" as="sourcePoint" />
+            <mxPoint x="380" y="480" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="operations-box" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8f9fa;strokeColor=#6c757d;dashed=1;" parent="1" vertex="1">
+          <mxGeometry x="50" y="580" width="920" height="240" as="geometry" />
+        </mxCell>
+        <mxCell id="operations-title" value="🔧 outstanding_segments 队列操作详解 + 关键Bug修复" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=16;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="400" y="590" width="370" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="op1" value="📥 fill_window() 入队操作 [已修复]&#xa;• 🔧 防止整数下溢: window_remain = max(0, space_left - bytes_in_flight)&#xa;• outstanding_segments.emplace(_next_seqno, seg)&#xa;• 每个新发送的段都加入队列&#xa;• ✅ 所有段发送时启动定时器 !_timer.is_running()&#xa;• 🎯 FIN段处理: 区分数据+FIN vs 单独FIN" style="text;html=1;strokeColor=none;fillColor=#fff2cc;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="70" y="630" width="270" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="op2" value="📤 ack_received() 出队操作&#xa;• while(!outstanding_segments.empty())&#xa;• 检查 front().first + length ≤ abs_ackno&#xa;• 满足条件则 pop() 并减少 _bytes_in_flight&#xa;• 重置重传计数和RTO" style="text;html=1;strokeColor=none;fillColor=#d4edda;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="360" y="630" width="270" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="op3" value="🔄 tick() 重传操作&#xa;• 检查 _timer.check_timeout()&#xa;• 获取 outstanding_segments.front().second&#xa;• 重传最早的未确认段&#xa;• 指数退避: RTO *= 2, count++" style="text;html=1;strokeColor=none;fillColor=#f8d7da;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=10;" parent="1" vertex="1">
+          <mxGeometry x="650" y="630" width="270" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bug-fixes" value="🐛 三个关键Bug修复详解&#xa;Bug1: SYN重传失败 → 解决: fill_window()发送SYN时启动定时器&#xa;Bug2: 整数下溢 → 解决: window_remain安全计算,避免size_t下溢&#xa;Bug3: FIN段错误发送 → 解决: 区分payload为空的原因,正确判断FIN发送时机" style="text;html=1;strokeColor=none;fillColor=#ffebee;align=left;verticalAlign=top;whiteSpace=wrap;rounded=1;fontSize=10;strokeColor=#d32f2f;" parent="1" vertex="1">
+          <mxGeometry x="70" y="730" width="850" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="key-features" value="🎯 关键修复要点: ✅ 防止size_t下溢导致窗口计算错误 | ✅ 确保所有段发送时启动定时器 | ✅ 正确处理FIN段的窗口占用 | ✅ 区分payload为空的两种情况" style="text;html=1;strokeColor=none;fillColor=#e1f5fe;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=1;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+          <mxGeometry x="70" y="810" width="850" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
